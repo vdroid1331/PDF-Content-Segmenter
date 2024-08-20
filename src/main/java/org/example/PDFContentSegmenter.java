@@ -68,7 +68,7 @@ public class PDFContentSegmenter {
             }
 
             private float getAverageLineHeight() {
-                // Implement logic to calculate average line height
+                // TODO: Implement logic to calculate average line height
                 return 6f; // Placeholder value
             }
         };

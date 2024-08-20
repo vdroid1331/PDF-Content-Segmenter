@@ -14,7 +14,12 @@ public class Path {
     public static String getOutputDirectoryPath() {
         return System.getProperty("user.dir") + File.separator + Constants.FILE_OUTPUT_DIRECTORY;
     }
-    public static String getOutputFileDirectoryName(String fileNameWithExtension) {
+
+    public static String getInputFilePath(String fileName) {
+        return getInputDirectoryPath() + File.separator + fileName;
+    }
+
+    public static String getOutputFileDirectoryPath(String fileNameWithExtension) {
         StringBuilder builder = new StringBuilder();
         String fileNameWithoutExtension = fileNameWithExtension;
         if (fileNameWithExtension.contains(".")) {
@@ -24,12 +29,11 @@ public class Path {
         LocalDateTime now = LocalDateTime.now();
         builder.append("_").append(now.getYear()).append("-").append(now.getMonthValue()).append("-").append(now.getDayOfMonth()).append("_").append(now.getHour()).append("-").append(now.getMinute()).append("-").append(now.getSecond());
         String outputFileDirectoryName = builder.toString();
-
-        File outputDir = new File(getOutputDirectoryPath() + File.separator + outputFileDirectoryName);
+        String outputFileDirPath = getOutputDirectoryPath() + File.separator + outputFileDirectoryName;
+        File outputDir = new File(outputFileDirPath);
         if (!outputDir.exists()) {
             outputDir.mkdirs();
         }
-
-        return outputFileDirectoryName;
+        return outputFileDirPath;
     }
 }

@@ -19,10 +19,9 @@ public class Main {
 //        int numberOfCuts = Integer.parseInt(args[2]);
 //        String baseDir = System.getProperty("user.dir");
 //        System.out.println(baseDir);
-        String inputDir = Path.getInputDirectoryPath();
         String fileName = "Java_Assignment_PDF.pdf";
-        String outputDirectory = Path.getOutputDirectoryPath() + File.separator + Path.getOutputFileDirectoryName("Java_Assignment_PDF.pdf");
-        String inputPdf = inputDir + File.separator + "Java_Assignment_PDF.pdf";
+        String outputDirectory = Path.getOutputFileDirectoryPath("Java_Assignment_PDF.pdf");
+        String inputPdf = Path.getInputFilePath("Java_Assignment_PDF.pdf");
         int numberOfCuts = 1;
         System.out.println("inputPath: " + inputPdf);
         System.out.println("outputPath: " + outputDirectory);
