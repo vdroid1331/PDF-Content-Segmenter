@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public class PDFContentSegmenter {
-
+    // takes in input path of the pdf, output dir and no of cuts, and divides into n+1 segments or no of pages whichever is smaller.
     public static void segmentPDF(String inputPdf, String outputDirectory, int numberOfCuts) throws IOException {
         try (PDDocument document = Loader.loadPDF(new File(inputPdf))) {
             int totalPages = document.getNumberOfPages();

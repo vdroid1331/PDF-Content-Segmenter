@@ -2,8 +2,7 @@ package org.example.utils;
 
 import org.example.PDFContentSegmenter;
 
-import java.io.IOException;
-
+// Helper class for defining no of cuts, and file name and path.
 public class PDFContentSegmentationConfig {
     private String fileName;
     private int noOfCuts;

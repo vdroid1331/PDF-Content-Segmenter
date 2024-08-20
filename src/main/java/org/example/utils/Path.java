@@ -2,7 +2,6 @@ package org.example.utils;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class Path {
     public static String getBaseDirectoryPath() {
@@ -23,6 +22,8 @@ public class Path {
         return getBaseDirectoryPath() + File.separator + Constants.FILE_CSV_INPUT;
     }
 
+    // returns output directory path with file name and current date time.
+    // also creates that output directory if it doesn't exist
     public static String getOutputFileDirectoryPath(String fileNameWithExtension) {
         StringBuilder builder = new StringBuilder();
         String fileNameWithoutExtension = fileNameWithExtension;

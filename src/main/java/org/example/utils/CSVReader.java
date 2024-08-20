@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSVReader implements CustomFileReader{
+
+    // reads the input.csv file and returns a list a PDFContentSegmentationConfig
     @Override
     public List<PDFContentSegmentationConfig> readFile() {
         List<PDFContentSegmentationConfig> list = new ArrayList<>();
