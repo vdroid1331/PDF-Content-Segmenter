@@ -1,10 +1,13 @@
 package org.example;
 
+import org.example.utils.CSVReader;
+import org.example.utils.CustomFileReader;
 import org.example.utils.PDFContentSegmentationConfig;
 import org.example.utils.Path;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static org.example.PDFContentSegmenter.segmentPDF;
 
@@ -30,8 +33,13 @@ public class Main {
 
 
         try {
-            PDFContentSegmentationConfig.Builder().fileName("Paper1.pdf").noOfCuts(3).build().execute();
+//            PDFContentSegmentationConfig.Builder().fileName("Paper1.pdf").noOfCuts(3).build().execute();
 //            segmentPDF(inputPdf, outputDirectory, numberOfCuts);
+            CustomFileReader csvFileReader = new CSVReader();
+            List<PDFContentSegmentationConfig> pdfContentSegmentationConfigList = csvFileReader.readFile();
+            for (PDFContentSegmentationConfig pdfContentSegmentationConfig : pdfContentSegmentationConfigList) {
+                pdfContentSegmentationConfig.execute();
+            }
             System.out.println("PDF segmentation completed successfully.");
         } catch (Exception e) {
             System.err.println("Error processing PDF: " + e.getMessage());

@@ -19,6 +19,10 @@ public class Path {
         return getInputDirectoryPath() + File.separator + fileName;
     }
 
+    public static String getCSVFilePath() {
+        return getBaseDirectoryPath() + File.separator + Constants.FILE_CSV_INPUT;
+    }
+
     public static String getOutputFileDirectoryPath(String fileNameWithExtension) {
         StringBuilder builder = new StringBuilder();
         String fileNameWithoutExtension = fileNameWithExtension;
