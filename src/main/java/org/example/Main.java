@@ -30,7 +30,7 @@ public class Main {
 
 
         try {
-            PDFContentSegmentationConfig.Builder().fileName("Java_Assignment_PDF.pdf").noOfCuts(2).build().execute();
+            PDFContentSegmentationConfig.Builder().fileName("Paper1.pdf").noOfCuts(3).build().execute();
 //            segmentPDF(inputPdf, outputDirectory, numberOfCuts);
             System.out.println("PDF segmentation completed successfully.");
         } catch (Exception e) {

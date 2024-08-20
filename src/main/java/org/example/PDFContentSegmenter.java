@@ -21,55 +21,48 @@ public class PDFContentSegmenter {
             List<Float> whitespaces = analyzeWhitespace(document);
             List<Integer> cutPositions = determineCutPositions(whitespaces, numberOfCuts, totalPages);
 
-            if (cutPositions.isEmpty()) {
-                // If no suitable cut positions found, create a single segment with all pages
+            // Ensure we have the correct number of segments
+            while (cutPositions.size() < numberOfCuts) {
+                addEvenlyDistributedCut(cutPositions, totalPages);
+            }
+
+            for (int i = 0; i <= cutPositions.size(); i++) {
+                int startPage = (i == 0) ? 0 : cutPositions.get(i - 1);
+                int endPage = (i == cutPositions.size()) ? totalPages : cutPositions.get(i);
+
                 PDDocument segment = new PDDocument();
-                for (int j = 0; j < totalPages; j++) {
+                for (int j = startPage; j < endPage; j++) {
                     segment.addPage(document.getPage(j));
                 }
-                String outputPath = outputDirectory + File.separator + "segment_1.pdf";
+
+                String outputPath = outputDirectory + File.separator + "segment_" + (i + 1) + ".pdf";
                 segment.save(outputPath);
                 segment.close();
-                System.out.println("No suitable cut positions found. Created a single segment with all pages.");
-            } else {
-                // Process segments based on cut positions
-                for (int i = 0; i <= cutPositions.size(); i++) {
-                    int startPage = (i == 0) ? 0 : cutPositions.get(i - 1);
-                    int endPage = (i == cutPositions.size()) ? totalPages : cutPositions.get(i);
-
-                    PDDocument segment = new PDDocument();
-                    for (int j = startPage; j < endPage; j++) {
-                        segment.addPage(document.getPage(j));
-                    }
-
-                    String outputPath = outputDirectory + File.separator + "segment_" + (i + 1) + ".pdf";
-                    segment.save(outputPath);
-                    segment.close();
-                }
             }
+
+            System.out.println("Created " + (cutPositions.size() + 1) + " segments.");
         }
     }
 
     private static List<Float> analyzeWhitespace(PDDocument document) throws IOException {
         List<Float> whitespaces = new ArrayList<>();
         PDFTextStripper stripper = new PDFTextStripper() {
+            float lastY = -1;
+            float significantWhitespaceThreshold = 20; // Adjust this value as needed
+
             @Override
             protected void writeString(String text, List<TextPosition> textPositions) throws IOException {
                 if (!textPositions.isEmpty()) {
-                    TextPosition lastPosition = textPositions.get(textPositions.size() - 1);
-                    TextPosition firstPosition = textPositions.get(0);
-
-                    // Check for significant whitespace
-                    if (lastPosition.getEndY() - firstPosition.getEndY() > 2 * getAverageLineHeight()) {
-                        whitespaces.add(lastPosition.getEndY());
+                    float currentY = textPositions.get(0).getY();
+                    if (lastY != -1) {
+                        float whitespace = currentY - lastY;
+                        if (whitespace > significantWhitespaceThreshold) {
+                            whitespaces.add(currentY);
+                        }
                     }
+                    lastY = currentY;
                 }
                 super.writeString(text, textPositions);
-            }
-
-            private float getAverageLineHeight() {
-                // TODO: Implement logic to calculate average line height
-                return 6f; // Placeholder value
             }
         };
 
@@ -81,25 +74,29 @@ public class PDFContentSegmenter {
 
     private static List<Integer> determineCutPositions(List<Float> whitespaces, int numberOfCuts, int totalPages) {
         List<Float> sortedWhitespaces = new ArrayList<>(whitespaces);
-        Collections.sort(sortedWhitespaces, Collections.reverseOrder());
+        Collections.sort(sortedWhitespaces);
 
         List<Integer> cutPositions = new ArrayList<>();
-        for (int i = 0; i < numberOfCuts && i < sortedWhitespaces.size(); i++) {
-            float cutWhitespace = sortedWhitespaces.get(i);
-            int cutPosition = whitespaces.indexOf(cutWhitespace);
-            if (cutPosition > 0 && cutPosition < totalPages - 1) {
-                cutPositions.add(cutPosition);
+        float pageHeight = 792; // Assuming standard US Letter size, adjust if needed
+
+        for (int i = 0; i < sortedWhitespaces.size() && cutPositions.size() < numberOfCuts; i++) {
+            float whitespace = sortedWhitespaces.get(i);
+            int page = (int) (whitespace / pageHeight);
+            if (page > 0 && page < totalPages - 1 && !cutPositions.contains(page)) {
+                cutPositions.add(page);
             }
         }
 
-        // If no cuts were found and there's more than one page, add a cut at the middle
-        if (cutPositions.isEmpty() && totalPages > 1) {
-            cutPositions.add(totalPages / 2);
-        }
-
-        Collections.sort(cutPositions);
         return cutPositions;
     }
 
+    private static void addEvenlyDistributedCut(List<Integer> cutPositions, int totalPages) {
+        for (int i = 1; i < totalPages; i++) {
+            if (!cutPositions.contains(i)) {
+                cutPositions.add(i);
+                Collections.sort(cutPositions);
+                return;
+            }
+        }
+    }
 }
-
