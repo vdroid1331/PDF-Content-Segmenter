@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.utils.PDFContentSegmentationConfig;
 import org.example.utils.Path;
 
 import java.io.File;
@@ -19,18 +20,20 @@ public class Main {
 //        int numberOfCuts = Integer.parseInt(args[2]);
 //        String baseDir = System.getProperty("user.dir");
 //        System.out.println(baseDir);
-        String fileName = "Java_Assignment_PDF.pdf";
-        String outputDirectory = Path.getOutputFileDirectoryPath("Java_Assignment_PDF.pdf");
-        String inputPdf = Path.getInputFilePath("Java_Assignment_PDF.pdf");
-        int numberOfCuts = 1;
-        System.out.println("inputPath: " + inputPdf);
-        System.out.println("outputPath: " + outputDirectory);
+//        PDFContentSegmentationConfig.Builder().fileName("Java_Assignment_PDF.pdf").noOfCuts(1).build().execute();
+//        String fileName = "Java_Assignment_PDF.pdf";
+//        String outputDirectory = Path.getOutputFileDirectoryPath("Java_Assignment_PDF.pdf");
+//        String inputPdf = Path.getInputFilePath("Java_Assignment_PDF.pdf");
+//        int numberOfCuts = 1;
+//        System.out.println("inputPath: " + inputPdf);
+//        System.out.println("outputPath: " + outputDirectory);
 
 
         try {
-            segmentPDF(inputPdf, outputDirectory, numberOfCuts);
+            PDFContentSegmentationConfig.Builder().fileName("Java_Assignment_PDF.pdf").noOfCuts(2).build().execute();
+//            segmentPDF(inputPdf, outputDirectory, numberOfCuts);
             System.out.println("PDF segmentation completed successfully.");
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Error processing PDF: " + e.getMessage());
         }
     }
