@@ -44,7 +44,7 @@ public class PDFContentSegmenter {
         }
     }
 
-    private static List<Float> analyzeWhitespace(PDDocument document) throws IOException {
+    static List<Float> analyzeWhitespace(PDDocument document) throws IOException {
         List<Float> whitespaces = new ArrayList<>();
         PDFTextStripper stripper = new PDFTextStripper() {
             float lastY = -1;
@@ -72,7 +72,7 @@ public class PDFContentSegmenter {
         return whitespaces;
     }
 
-    private static List<Integer> determineCutPositions(List<Float> whitespaces, int numberOfCuts, int totalPages) {
+    static List<Integer> determineCutPositions(List<Float> whitespaces, int numberOfCuts, int totalPages) {
         List<Float> sortedWhitespaces = new ArrayList<>(whitespaces);
         Collections.sort(sortedWhitespaces);
 
